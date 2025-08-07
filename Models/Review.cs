@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHotelRoomManagementProject.Models
 {
-    class Review
+      public class Review
     {
     }
 }

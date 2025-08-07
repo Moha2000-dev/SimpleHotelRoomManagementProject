@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using HotelManagementSystem.Models;  // Make sure this namespace is correct
+using SimpleHotelRoomManagementProject.Models;  // Make sure this namespace is correct
 
 namespace HotelManagementSystem.Helpers
 {

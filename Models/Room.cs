@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleHotelRoomManagementProject.Models
+ namespace SimpleHotelRoomManagementProject.Models
 {
-    class Room
+    public class Room
     {
     }
 }
