@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using SimpleHotelRoomManagementProject.Models;
 
 namespace SimpleHotelRoomManagementProject.Services
 {
-    interface IGuestService
+    public interface IGuestService
     {
+        List<Guest> GetAllGuests();
+        Guest GetGuestById(int guestId);
+        void AddGuest(Guest guest);
+        void UpdateGuest(Guest guest);
+        void DeleteGuest(int guestId);
     }
 }
