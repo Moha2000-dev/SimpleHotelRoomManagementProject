@@ -12,8 +12,8 @@ using SimpleHotelRoomManagementProject;
 namespace SimpleHotelRoomManagementProject.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
-    [Migration("20250807065525_hotelinit")]
-    partial class hotelinit
+    [Migration("20250808173826_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,7 +112,7 @@ namespace SimpleHotelRoomManagementProject.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GuestId")
+                    b.Property<int?>("GuestId")
                         .HasColumnType("int");
 
                     b.Property<int>("Rating")
@@ -123,7 +123,7 @@ namespace SimpleHotelRoomManagementProject.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.HasKey("ReviewId");
@@ -191,14 +191,12 @@ namespace SimpleHotelRoomManagementProject.Migrations
                     b.HasOne("SimpleHotelRoomManagementProject.Models.Guest", null)
                         .WithMany()
                         .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("SimpleHotelRoomManagementProject.Models.Room", null)
                         .WithMany()
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

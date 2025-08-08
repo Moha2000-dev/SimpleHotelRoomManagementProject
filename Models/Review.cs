@@ -1,18 +1,15 @@
 ﻿namespace SimpleHotelRoomManagementProject.Models
 {
+    // Review.cs
     public class Review
     {
         public int ReviewId { get; set; }
-        public int GuestId { get; set; }           // Foreign key reference to Guest
-        public int RoomId { get; set; }            // Foreign key reference to Room
+        public int? GuestId { get; set; }   // <- nullable
+        public int? RoomId { get; set; }   // <- nullable
         public string ReviewerName { get; set; }
         public string Comment { get; set; }
-        public int Rating { get; set; }            // Rating out of 5 (for example)
+        public int Rating { get; set; }
         public DateTime Date { get; set; }
-
-        public Review()
-        {
-            Date = DateTime.Now;
-        }
     }
+
 }
