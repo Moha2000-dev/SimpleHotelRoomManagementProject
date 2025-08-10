@@ -12,7 +12,12 @@ namespace SimpleHotelRoomManagementProject
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=hotel.db"); // Use SqlServer/MySQL as needed
+            optionsBuilder.UseSqlServer(
+    @"Server=localhost;Database=HotelDB;Trusted_Connection=True;TrustServerCertificate=True;");
+
+
+
+            // Use SqlServer/MySQL as needed
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
