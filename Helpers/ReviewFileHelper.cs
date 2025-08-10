@@ -8,26 +8,29 @@ namespace SimpleHotelRoomManagementProject.Helpers
 {
     public static class ReviewFileHelper
     {
-        private static string filePath = "reviews.json"; // or your preferred file
+        private static readonly string filePath =
+            DataPaths.GetDataFile("reviews.json");
 
-        // Save all reviews to file
+        private static readonly JsonSerializerOptions Options =
+            new JsonSerializerOptions { WriteIndented = true };
+
+        // Save all reviews
         public static void SaveReviews(List<Review> reviews)
         {
-            string json = JsonSerializer.Serialize(reviews);
+            string json = JsonSerializer.Serialize(reviews, Options);
             File.WriteAllText(filePath, json);
         }
 
-        // Load all reviews from file
+        // Load all reviews
         public static List<Review> LoadReviews()
         {
-            if (!File.Exists(filePath))
-                return new List<Review>();
+            if (!File.Exists(filePath)) return new List<Review>();
 
             string json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<List<Review>>(json);
+            return JsonSerializer.Deserialize<List<Review>>(json) ?? new List<Review>();
         }
 
-        // Add a single review
+        // Add a single review (helper)
         public static void AddReview(Review review)
         {
             var reviews = LoadReviews();
