@@ -6,11 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SimpleHotelRoomManagementProject.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:Migrations/20250810043720_InitialCreate.cs
     public partial class InitialCreate : Migration
-========
-    public partial class Init : Migration
->>>>>>>> 11b64c20e96c539b42e1b4a3a6ecd46dc3af4f30:Migrations/20250808173826_Init.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
