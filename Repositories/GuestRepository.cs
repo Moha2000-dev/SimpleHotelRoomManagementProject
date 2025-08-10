@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SimpleHotelRoomManagementProject.Models;
-using HotelManagementSystem.Helpers; // For GuestFileHelper
+using SimpleHotelRoomManagementProject.Helpers; // For GuestFileHelper
 
 namespace SimpleHotelRoomManagementProject.Repositories
 {

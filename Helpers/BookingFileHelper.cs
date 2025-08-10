@@ -4,7 +4,7 @@ using System.Text.Json;
 using SimpleHotelRoomManagementProject.Helpers;
 using SimpleHotelRoomManagementProject.Models;  // Make sure this namespace is correct
 
-namespace HotelManagementSystem.Helpers
+namespace SimpleHotelRoomManagementProject.Helpers
 {
     public static class BookingFileHelper
     {

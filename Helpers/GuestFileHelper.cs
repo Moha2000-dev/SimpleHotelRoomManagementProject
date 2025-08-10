@@ -4,7 +4,8 @@ using System.Text.Json;
 using SimpleHotelRoomManagementProject.Helpers;
 using SimpleHotelRoomManagementProject.Models;
 
-namespace HotelManagementSystem.Helpers
+
+namespace SimpleHotelRoomManagementProject.Helpers
 {
     public static class GuestFileHelper
     {
