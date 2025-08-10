@@ -12,8 +12,13 @@ using SimpleHotelRoomManagementProject;
 namespace SimpleHotelRoomManagementProject.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
+<<<<<<<< HEAD:Migrations/20250810043720_InitialCreate.Designer.cs
     [Migration("20250810043720_InitialCreate")]
     partial class InitialCreate
+========
+    [Migration("20250808173826_Init")]
+    partial class Init
+>>>>>>>> 11b64c20e96c539b42e1b4a3a6ecd46dc3af4f30:Migrations/20250808173826_Init.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
