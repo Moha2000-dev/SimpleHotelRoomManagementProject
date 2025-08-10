@@ -1,57 +1,55 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleHotelRoomManagementProject.Models;
-using SimpleHotelRoomManagementProject.Helpers; // For RoomFileHelper
 
 namespace SimpleHotelRoomManagementProject.Repositories
 {
     public class RoomRepository : IRoomRepository
     {
-        private List<Room> rooms;
-
-        public RoomRepository()
-        {
-            rooms = RoomFileHelper.LoadRooms();
-        }
-
         public List<Room> GetAllRooms()
         {
-            return rooms;
+            using var db = new HotelDbContext();
+            return db.Rooms.ToList();
         }
 
         public Room GetRoomById(int roomId)
         {
-            return rooms.FirstOrDefault(r => r.RoomId == roomId);
+            using var db = new HotelDbContext();
+            return db.Rooms.FirstOrDefault(r => r.RoomId == roomId);
         }
 
         public void AddRoom(Room room)
         {
-            rooms.Add(room);
-            RoomFileHelper.SaveRooms(rooms);
+            using var db = new HotelDbContext();
+
+            if (string.IsNullOrWhiteSpace(room.RoomNumber))
+                throw new ArgumentException("RoomNumber is required.");
+            if (string.IsNullOrWhiteSpace(room.Type))
+                throw new ArgumentException("Type is required.");
+
+            // if your column isn’t nullable, keep this; otherwise it’s safe too:
+            room.Description ??= null;
+
+            db.Rooms.Add(room);
+            db.SaveChanges();
         }
 
         public void UpdateRoom(Room room)
         {
-            var existing = rooms.FirstOrDefault(r => r.RoomId == room.RoomId);
-            if (existing != null)
-            {
-                existing.RoomNumber = room.RoomNumber;
-                existing.Type = room.Type;
-                existing.PricePerNight = room.PricePerNight;
-                existing.IsAvailable = room.IsAvailable;
-                existing.Description = room.Description;
-                // Add/update any additional fields if you have them
-                RoomFileHelper.SaveRooms(rooms);
-            }
+            using var db = new HotelDbContext();
+            db.Rooms.Update(room);
+            db.SaveChanges();
         }
 
         public void DeleteRoom(int roomId)
         {
-            var room = rooms.FirstOrDefault(r => r.RoomId == roomId);
+            using var db = new HotelDbContext();
+            var room = db.Rooms.FirstOrDefault(r => r.RoomId == roomId);
             if (room != null)
             {
-                rooms.Remove(room);
-                RoomFileHelper.SaveRooms(rooms);
+                db.Rooms.Remove(room);
+                db.SaveChanges();
             }
         }
     }

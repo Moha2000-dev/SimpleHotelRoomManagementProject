@@ -1,57 +1,53 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleHotelRoomManagementProject.Models;
-using SimpleHotelRoomManagementProject.Helpers; // For ReviewFileHelper
 
 namespace SimpleHotelRoomManagementProject.Repositories
 {
     public class ReviewRepository : IReviewRepository
     {
-        private List<Review> reviews;
-
-        public ReviewRepository()
-        {
-            reviews = ReviewFileHelper.LoadReviews();
-        }
-
         public List<Review> GetAllReviews()
         {
-            return reviews;
+            using var db = new HotelDbContext();
+            return db.Reviews.ToList();
         }
 
         public Review GetReviewById(int reviewId)
         {
-            return reviews.FirstOrDefault(r => r.ReviewId == reviewId);
+            using var db = new HotelDbContext();
+            return db.Reviews.FirstOrDefault(r => r.ReviewId == reviewId);
         }
 
         public void AddReview(Review review)
         {
-            reviews.Add(review);
-            ReviewFileHelper.SaveReviews(reviews);
+            using var db = new HotelDbContext();
+
+            // guard requireds / defaults
+            review.ReviewerName ??= "Anonymous";
+            review.Comment ??= "";
+            if (review.Rating < 1) review.Rating = 5;
+            if (review.Date == default) review.Date = DateTime.UtcNow;
+
+            db.Reviews.Add(review);
+            db.SaveChanges();
         }
 
         public void UpdateReview(Review review)
         {
-            var existing = reviews.FirstOrDefault(r => r.ReviewId == review.ReviewId);
-            if (existing != null)
-            {
-                existing.GuestId = review.GuestId;
-                existing.RoomId = review.RoomId;
-                existing.ReviewerName = review.ReviewerName;
-                existing.Comment = review.Comment;
-                existing.Rating = review.Rating;
-                existing.Date = review.Date;
-                ReviewFileHelper.SaveReviews(reviews);
-            }
+            using var db = new HotelDbContext();
+            db.Reviews.Update(review);
+            db.SaveChanges();
         }
 
         public void DeleteReview(int reviewId)
         {
-            var review = reviews.FirstOrDefault(r => r.ReviewId == reviewId);
-            if (review != null)
+            using var db = new HotelDbContext();
+            var r = db.Reviews.FirstOrDefault(x => x.ReviewId == reviewId);
+            if (r != null)
             {
-                reviews.Remove(review);
-                ReviewFileHelper.SaveReviews(reviews);
+                db.Reviews.Remove(r);
+                db.SaveChanges();
             }
         }
     }

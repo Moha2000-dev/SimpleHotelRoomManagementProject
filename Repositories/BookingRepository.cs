@@ -1,61 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SimpleHotelRoomManagementProject.Helpers;
 using SimpleHotelRoomManagementProject.Models;
 
 namespace SimpleHotelRoomManagementProject.Repositories
 {
-    public class  BookingRepository : IBookingRepository
+    public class BookingRepository : IBookingRepository
     {
-        private List<Booking> bookings;
-
-        public BookingRepository()
-        {
-            // Load existing bookings from file (you can use a FileHelper here)
-            bookings = BookingFileHelper.LoadBookings();
-        }
-
         public List<Booking> GetAllBookings()
         {
-            return bookings;
+            using var db = new HotelDbContext();
+            return db.Bookings.ToList();
         }
 
         public Booking GetBookingById(int bookingId)
         {
-            return bookings.FirstOrDefault(b => b.BookingId == bookingId);
+            using var db = new HotelDbContext();
+            return db.Bookings.FirstOrDefault(b => b.BookingId == bookingId);
         }
 
         public void AddBooking(Booking booking)
         {
-            bookings.Add(booking);
-            BookingFileHelper.SaveBookings(bookings);
+            using var db = new HotelDbContext();
+
+            // optional: sanity checks + auto fields
+            if (booking.CheckOutDate < booking.CheckInDate)
+                throw new ArgumentException("Check-out date must be on/after check-in date.");
+
+            // If you want to auto-calc total based on the room price:
+            var room = db.Rooms.FirstOrDefault(r => r.RoomId == booking.RoomId);
+            if (room != null)
+            {
+                var nights = Math.Max(1, (booking.CheckOutDate - booking.CheckInDate).Days);
+                booking.TotalAmount = room.PricePerNight * nights; // make sure PricePerNight & TotalAmount are DECIMAL
+            }
+
+            if (string.IsNullOrWhiteSpace(booking.Status))
+                booking.Status = "Confirmed";
+
+            db.Bookings.Add(booking);
+            db.SaveChanges();
         }
 
         public void UpdateBooking(Booking booking)
         {
-            var existing = bookings.FirstOrDefault(b => b.BookingId == booking.BookingId);
-            if (existing != null)
-            {
-                // Update fields
-                existing.GuestId = booking.GuestId;
-                existing.RoomId = booking.RoomId;
-                existing.CheckInDate = booking.CheckInDate;
-                existing.CheckOutDate = booking.CheckOutDate;
-                existing.TotalAmount = booking.TotalAmount;
-                existing.Status = booking.Status;
-
-                BookingFileHelper.SaveBookings(bookings);
-            }
+            using var db = new HotelDbContext();
+            db.Bookings.Update(booking);
+            db.SaveChanges();
         }
 
         public void DeleteBooking(int bookingId)
         {
-            var booking = bookings.FirstOrDefault(b => b.BookingId == bookingId);
-            if (booking != null)
+            using var db = new HotelDbContext();
+            var b = db.Bookings.FirstOrDefault(x => x.BookingId == bookingId);
+            if (b != null)
             {
-                bookings.Remove(booking);
-                BookingFileHelper.SaveBookings(bookings);
+                db.Bookings.Remove(b);
+                db.SaveChanges();
             }
         }
     }

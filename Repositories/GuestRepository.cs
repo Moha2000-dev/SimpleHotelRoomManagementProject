@@ -1,57 +1,56 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SimpleHotelRoomManagementProject.Models;
-using SimpleHotelRoomManagementProject.Helpers; // For GuestFileHelper
 
 namespace SimpleHotelRoomManagementProject.Repositories
 {
     public class GuestRepository : IGuestRepository
     {
-        private List<Guest> guests;
-
-        public GuestRepository()
-        {
-            guests = GuestFileHelper.LoadGuests();
-        }
-
         public List<Guest> GetAllGuests()
         {
-            return guests;
+            using var db = new HotelDbContext();
+            return db.Guests.ToList();
         }
 
         public Guest GetGuestById(int guestId)
         {
-            return guests.FirstOrDefault(g => g.GuestId == guestId);
+            using var db = new HotelDbContext();
+            return db.Guests.FirstOrDefault(g => g.GuestId == guestId);
         }
 
         public void AddGuest(Guest guest)
         {
-            guests.Add(guest);
-            GuestFileHelper.SaveGuests(guests);
+            using var db = new HotelDbContext();
+
+            // basic guards (Name is usually required in your UI)
+            guest.Name = string.IsNullOrWhiteSpace(guest.Name) ? "Unknown" : guest.Name;
+            guest.Email = guest.Email ?? "";
+            guest.PhoneNumber = guest.PhoneNumber ?? "";
+
+            // optional: ensure dates make sense
+            if (guest.CheckOutDate < guest.CheckInDate)
+                guest.CheckOutDate = guest.CheckInDate;
+
+            db.Guests.Add(guest);
+            db.SaveChanges();
         }
 
         public void UpdateGuest(Guest guest)
         {
-            var existing = guests.FirstOrDefault(g => g.GuestId == guest.GuestId);
-            if (existing != null)
-            {
-                existing.Name = guest.Name;
-                existing.Email = guest.Email;
-                existing.PhoneNumber = guest.PhoneNumber;
-                existing.CheckInDate = guest.CheckInDate;
-                existing.CheckOutDate = guest.CheckOutDate;
-                // Add any extra fields here
-                GuestFileHelper.SaveGuests(guests);
-            }
+            using var db = new HotelDbContext();
+            db.Guests.Update(guest);
+            db.SaveChanges();
         }
 
         public void DeleteGuest(int guestId)
         {
-            var guest = guests.FirstOrDefault(g => g.GuestId == guestId);
-            if (guest != null)
+            using var db = new HotelDbContext();
+            var g = db.Guests.FirstOrDefault(x => x.GuestId == guestId);
+            if (g != null)
             {
-                guests.Remove(guest);
-                GuestFileHelper.SaveGuests(guests);
+                db.Guests.Remove(g);
+                db.SaveChanges();
             }
         }
     }
