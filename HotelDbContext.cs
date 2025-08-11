@@ -25,11 +25,28 @@ namespace SimpleHotelRoomManagementProject
             modelBuilder.Entity<Room>(entity =>
             {
                 entity.HasKey(r => r.RoomId);
-                entity.Property(r => r.RoomNumber).IsRequired().HasMaxLength(10);
-                entity.Property(r => r.Type).IsRequired().HasMaxLength(30);
-                entity.Property(r => r.PricePerNight).HasColumnType("decimal(10,2)");
-                entity.Property(r => r.IsAvailable).HasDefaultValue(true);
-                entity.Property(r => r.Description).HasMaxLength(200);
+
+                entity.Property(r => r.RoomNumber)
+                      .IsRequired()
+                      .HasMaxLength(10)
+                      .HasDefaultValue("N/A");          // DB default
+
+                entity.Property(r => r.Type)
+                      .IsRequired()
+                      .HasMaxLength(30)
+                      .HasDefaultValue("Standard");     // DB default
+
+                entity.Property(r => r.PricePerNight)
+                      .HasColumnType("decimal(10,2)")
+                      .HasDefaultValue(0m);             // DB default
+
+                entity.Property(r => r.IsAvailable)
+                      .HasDefaultValue(false);          // DB default (or true if you prefer)
+
+                entity.Property(r => r.Description)
+                      .HasMaxLength(200)
+                      .IsRequired(false);
+
             });
 
             // GUEST

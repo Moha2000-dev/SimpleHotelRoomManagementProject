@@ -3,12 +3,10 @@
     public class Room
     {
         public int RoomId { get; set; }
-        public string RoomNumber { get; set; }      // e.g. "101", "A-12"
-        public string Type { get; set; }            // e.g. "Single", "Double", "Suite"
-        public double PricePerNight { get; set; }
-        public bool IsAvailable { get; set; }
-        public string Description { get; set; }     // Optional: Room details
-
-        // Optional: Add more fields like Floor, Capacity, etc.
+        public string RoomNumber { get; set; } = "";   // required
+        public string Type { get; set; } = "";         // required
+        public decimal PricePerNight { get; set; } = 0m;
+        public bool IsAvailable { get; set; } = false;
+        public string? Description { get; set; }
     }
 }

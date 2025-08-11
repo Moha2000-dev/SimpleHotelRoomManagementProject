@@ -50,7 +50,7 @@ namespace SimpleHotelRoomManagementProject
                         Room newRoom = new Room();
                         Console.Write("Room Number: "); newRoom.RoomNumber = Console.ReadLine();
                         Console.Write("Type: "); newRoom.Type = Console.ReadLine();
-                        Console.Write("Price Per Night: "); newRoom.PricePerNight = double.Parse(Console.ReadLine());
+                        Console.Write("Price Per Night: "); newRoom.PricePerNight = decimal.Parse(Console.ReadLine());
                         newRoom.IsAvailable = true;
                         roomService.AddRoom(newRoom);
                         Console.WriteLine("Room added!\n");

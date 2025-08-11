@@ -32,7 +32,7 @@ namespace SimpleHotelRoomManagementProject.Repositories
             if (room != null)
             {
                 var nights = Math.Max(1, (booking.CheckOutDate - booking.CheckInDate).Days);
-                booking.TotalAmount = room.PricePerNight * nights; // make sure PricePerNight & TotalAmount are DECIMAL
+                booking.TotalAmount = (double)(room.PricePerNight * nights); // make sure PricePerNight & TotalAmount are DECIMAL
             }
 
             if (string.IsNullOrWhiteSpace(booking.Status))
